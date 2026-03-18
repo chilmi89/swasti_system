@@ -1,0 +1,202 @@
+{
+  "project_name": "SWASTI - Sistem Early Warning Inflasi Pangan",
+  "tech_stack": {
+    "frontend_backend": "Next.js (Fullstack)",
+    "machine_learning": "Flask + Jupyter Notebook",
+    "database": "Supabase PostgreSQL",
+    "visualization": ["Chart.js", "ECharts"],
+    "map": "Leaflet"
+  },
+
+  "roles": ["admin", "analis", "petani", "publik"],
+
+  "system_architecture": {
+    "services": [
+      {
+        "name": "Next.js App",
+        "responsibility": [
+          "UI Dashboard",
+          "API Route",
+          "Auth & RBAC",
+          "Fetch data dari Supabase",
+          "Call Flask API"
+        ]
+      },
+      {
+        "name": "Flask ML Service",
+        "responsibility": [
+          "Preprocessing data",
+          "Training model",
+          "Prediksi harga",
+          "Hitung inflasi",
+          "Analisis risiko"
+        ]
+      },
+      {
+        "name": "Supabase",
+        "responsibility": [
+          "Database PostgreSQL",
+          "Authentication",
+          "Storage laporan"
+        ]
+      }
+    ]
+  },
+
+  "pages": {
+    "public": [
+      "Landing Page",
+      "Harga Komoditas",
+      "Inflasi Nasional",
+      "Grafik Visualisasi"
+    ],
+    "admin": [
+      "Dashboard Admin",
+      "Kelola User",
+      "Kelola Komoditas",
+      "Kelola Harga",
+      "Kelola Model ML",
+      "Generate Laporan",
+      "Monitoring Sistem"
+    ],
+    "analis": [
+      "Dashboard Nasional",
+      "Prediksi Harga",
+      "Peta Risiko Inflasi",
+      "Analisis Tren",
+      "Laporan"
+    ],
+    "petani": [
+      "Dashboard Petani",
+      "Tren Harga",
+      "Prediksi Harga",
+      "Risiko Wilayah"
+    ]
+  },
+
+  "features": {
+    "core": [
+      "Dashboard Nasional",
+      "Prediksi Harga Komoditas",
+      "Peta Risiko Inflasi",
+      "Early Warning System",
+      "Analisis Tren Harga",
+      "Export Laporan"
+    ],
+    "advanced": [
+      "AI Recommendation (Waktu jual terbaik)",
+      "Insight otomatis (kenaikan harga)",
+      "Ranking komoditas",
+      "Open API"
+    ]
+  },
+
+  "api_design": {
+    "nextjs": [
+      "/api/harga",
+      "/api/prediksi",
+      "/api/inflasi",
+      "/api/risk",
+      "/api/dashboard",
+      "/api/report"
+    ],
+    "flask": [
+      "/predict",
+      "/train",
+      "/inflation",
+      "/risk",
+      "/preprocess"
+    ]
+  },
+
+  "database": {
+    "tables": [
+      "profiles",
+      "komoditas",
+      "provinsi",
+      "kabupaten",
+      "harga",
+      "prediksi",
+      "inflasi",
+      "risk_analysis",
+      "ml_models",
+      "notifications",
+      "reports",
+      "system_logs",
+      "early_warning",
+      "user_favorites",
+      "dashboard_cache"
+    ]
+  },
+
+  "ml_pipeline": [
+    "Ambil data harga",
+    "Preprocessing data",
+    "Training model (LSTM/XGBoost)",
+    "Prediksi harga",
+    "Hitung inflasi",
+    "Hitung risk level",
+    "Simpan ke database"
+  ],
+
+  "development_plan": {
+    "phase_1_setup": [
+      "Setup Next.js project",
+      "Setup Supabase project",
+      "Setup Flask ML service",
+      "Setup koneksi Next.js ke Supabase"
+    ],
+
+    "phase_2_database": [
+      "Create semua tabel PostgreSQL",
+      "Relasi dan index",
+      "Seeder data dummy"
+    ],
+
+    "phase_3_auth": [
+      "Implement Supabase Auth",
+      "Role-based access (admin, analis, petani)",
+      "Middleware proteksi route"
+    ],
+
+    "phase_4_core_features": [
+      "Dashboard nasional",
+      "CRUD komoditas",
+      "CRUD harga",
+      "Grafik harga"
+    ], phases_5_9: [
+      "ML Integration",
+      "Advanced Features",
+      "Reporting",
+      "Optimization",
+      "Deployment"
+    ]
+  },
+
+  "task_breakdown": {
+    "frontend": [
+      "Buat layout dashboard",
+      "Buat sidebar role-based",
+      "Buat halaman grafik",
+      "Integrasi API ke UI"
+    ],
+    "backend_nextjs": [
+      "Buat API route",
+      "Integrasi Supabase",
+      "Integrasi Flask API",
+      "Middleware auth"
+    ],
+    "ml_flask": [
+      "Setup Flask API",
+      "Buat endpoint /predict",
+      "Buat endpoint /risk",
+      "Training model di Jupyter"
+    ],
+    "database": [
+      "Design schema",
+      "Implement di Supabase",
+      "Seeder data",
+      "Testing query"
+    ]
+  }
+}
