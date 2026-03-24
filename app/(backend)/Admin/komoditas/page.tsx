@@ -1,21 +1,21 @@
 "use client";
 
 import React, { useState } from 'react';
-import { 
-    Plus, 
-    Search, 
-    Filter, 
-    MoreHorizontal, 
-    Edit, 
-    Trash2, 
-    Database, 
-    TrendingUp, 
+import {
+    Plus,
+    Search,
+    Filter,
+    MoreHorizontal,
+    Edit,
+    Trash2,
+    Database,
+    TrendingUp,
     TrendingDown,
     ChevronLeft,
     ChevronRight
 } from 'lucide-react';
-import { Button } from '../_components/ui/Button';
-import { Card } from '../_components/ui/Card';
+import { Button } from '../../_components/ui/Button';
+import { Card } from '../../_components/ui/Card';
 import { motion } from 'framer-motion';
 
 const commodities = [
@@ -47,8 +47,8 @@ export default function KomoditasPage() {
                 <div className="p-6 border-b border-slate-200 flex flex-col md:flex-row gap-6 justify-between items-center bg-slate-50/20">
                     <div className="relative w-full md:w-[400px] group">
                         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-slate-900 transition-colors" size={18} />
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             placeholder="Cari komoditas..."
                             className="w-full bg-white border border-slate-200 rounded-xl py-3.5 pl-14 pr-6 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-slate-900 transition-all font-bold shadow-sm"
                             value={searchTerm}
@@ -75,7 +75,7 @@ export default function KomoditasPage() {
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {commodities.map((item, idx) => (
-                                <motion.tr 
+                                <motion.tr
                                     key={item.id}
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
@@ -99,10 +99,9 @@ export default function KomoditasPage() {
                                         <span className="font-black text-slate-900 text-sm">RP {item.price.replace('Rp ', '')}</span>
                                     </td>
                                     <td className="px-8 py-4">
-                                        <div className={`flex items-center gap-2 font-black text-[9px] uppercase tracking-widest ${
-                                            item.status === 'Meningkat' ? 'text-red-600' : 
+                                        <div className={`flex items-center gap-2 font-black text-[9px] uppercase tracking-widest ${item.status === 'Meningkat' ? 'text-red-600' :
                                             item.status === 'Menurun' ? 'text-emerald-600' : 'text-slate-900'
-                                        }`}>
+                                            }`}>
                                             {item.trend}
                                         </div>
                                     </td>

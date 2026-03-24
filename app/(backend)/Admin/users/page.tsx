@@ -1,23 +1,23 @@
 "use client";
 
 import React, { useState } from 'react';
-import { 
-    Plus, 
-    Search, 
-    UserPlus, 
-    Shield, 
-    Mail, 
-    MapPin, 
-    MoreHorizontal, 
-    Edit, 
+import {
+    Plus,
+    Search,
+    UserPlus,
+    Shield,
+    Mail,
+    MapPin,
+    MoreHorizontal,
+    Edit,
     Trash2,
     ChevronLeft,
     ChevronRight,
     Lock,
     CheckCircle2
 } from 'lucide-react';
-import { Button } from '../_components/ui/Button';
-import { Card } from '../_components/ui/Card';
+import { Button } from '../../_components/ui/Button';
+import { Card } from '../../_components/ui/Card';
 import { motion } from 'framer-motion';
 
 const users = [
@@ -66,8 +66,8 @@ export default function UsersPage() {
                 <div className="p-6 border-b border-slate-200 flex flex-col md:flex-row gap-6 justify-between items-center bg-slate-50/10">
                     <div className="relative w-full md:w-[400px] group">
                         <Search className="absolute left-6 top-1/2 -translate-y-1/2 text-slate-300 group-focus-within:text-slate-900 transition-colors" size={18} />
-                        <input 
-                            type="text" 
+                        <input
+                            type="text"
                             placeholder="Mencari identitas digital..."
                             className="w-full bg-white border border-slate-200 rounded-xl py-3.5 pl-14 pr-6 text-slate-900 placeholder:text-slate-300 focus:outline-none focus:border-slate-900 transition-all font-bold shadow-sm"
                             value={searchTerm}
@@ -88,7 +88,7 @@ export default function UsersPage() {
                         </thead>
                         <tbody className="divide-y divide-slate-100">
                             {users.map((item, idx) => (
-                                <motion.tr 
+                                <motion.tr
                                     key={item.id}
                                     initial={{ opacity: 0 }}
                                     animate={{ opacity: 1 }}
