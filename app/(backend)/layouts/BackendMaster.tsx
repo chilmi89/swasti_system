@@ -30,9 +30,10 @@ export default function BackendLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <body
                 className={`${robotoFlex.variable} ${geistMono.variable} antialiased bg-slate-50 text-slate-900 font-sans`}
+                suppressHydrationWarning
             >
                 <BackendClientLayout>
                     {children}
