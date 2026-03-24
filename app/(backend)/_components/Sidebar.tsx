@@ -14,7 +14,7 @@ import {
     UserIcon,
     AlertTriangle,
     Map,
-    ChevronDown,
+    MapPin,
     Settings
 } from 'lucide-react';
 import { usePathname, useRouter } from 'next/navigation';
@@ -34,6 +34,7 @@ const roleMenus = {
             group: "MASTER DATA",
             items: [
                 { name: 'Komoditas Master', icon: Database, href: '/admin/komoditas' },
+                { name: 'Region Master', icon: MapPin, href: '/admin/region' },
                 { name: 'Role Management', icon: ShieldCheck, href: '/admin/role' },
                 { name: 'User Management', icon: Users, href: '/admin/users' },
             ]

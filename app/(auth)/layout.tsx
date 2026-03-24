@@ -3,6 +3,8 @@ import React from 'react';
 import Link from 'next/link';
 import { Globe, HelpCircle, Shield, Info } from 'lucide-react';
 import { Geist, Geist_Mono } from "next/font/google";
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 import "../(frontend)/layouts/globals.css";
 
 const geistSans = Geist({
@@ -83,6 +85,18 @@ export default function AuthLayout({
                         </div>
                     </footer>
                 </div>
+                <ToastContainer 
+                    position="top-right"
+                    autoClose={3000}
+                    hideProgressBar={false}
+                    newestOnTop={false}
+                    closeOnClick
+                    rtl={false}
+                    pauseOnFocusLoss
+                    draggable
+                    pauseOnHover
+                    theme="colored"
+                />
             </body>
         </html>
     );
