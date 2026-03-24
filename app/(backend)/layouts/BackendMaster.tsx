@@ -1,7 +1,8 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono, Roboto_Flex } from "next/font/google";
 import "./globals.css";
-import { Sidebar } from "../_components/Sidebar";
+import React from "react";
+import BackendClientLayout from "./BackendClientLayout";
 
 const robotoFlex = Roboto_Flex({
     subsets: ["latin"],
@@ -33,15 +34,9 @@ export default function BackendLayout({
             <body
                 className={`${robotoFlex.variable} ${geistMono.variable} antialiased bg-slate-50 text-slate-900 font-sans`}
             >
-                <div className="flex h-screen overflow-hidden relative">
-                    <div className="hidden md:block h-full relative z-20">
-                        <Sidebar />
-                    </div>
-
-                    <main className="flex-1 overflow-y-auto p-12 bg-white relative z-10 border-l border-slate-100 shadow-sm">
-                        {children}
-                    </main>
-                </div>
+                <BackendClientLayout>
+                    {children}
+                </BackendClientLayout>
             </body>
         </html>
     );

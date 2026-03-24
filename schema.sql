@@ -1,57 +1,58 @@
--- SWASTI Database Schema (SQL)
--- This file contains the raw SQL to set up your Supabase database.
--- Once executed in Supabase, run `npx prisma db pull` to update your Prisma schema.
+-- SWASTI Database Schema (SQL) - Optimized for Dataset Ingestion
+-- Aligned with CSV: Date_Scraped, Date_Param, Commodity_ID, Commodity_Name, Province_ID, Province_Name, Price, Price_Type
 
--- 1. Create Role Enum
-CREATE TYPE "Role" AS ENUM ('ADMIN', 'ANALYST', 'FARMER', 'PUBLIC');
+-- 1. Roles Table
+    CREATE TABLE "Role" (
+        "id" SERIAL PRIMARY KEY,
+        "name" VARCHAR(50) UNIQUE NOT NULL -- e.g., 'ADMIN', 'PEMERINTAH', 'PETANI', 'PUBLIK'
+    );
 
--- 2. Commodities Table
+-- 2. Commodities Table (Master Data)
 CREATE TABLE "Commodity" (
-    "id" SERIAL PRIMARY KEY,
+    "id" INTEGER PRIMARY KEY,        -- Using Commodity_ID from CSV
     "name" VARCHAR(255) UNIQUE NOT NULL,
-    "unit" VARCHAR(50) NOT NULL,
+    "unit" VARCHAR(50) DEFAULT 'kg',
     "category" VARCHAR(100)
 );
 
--- 3. Regions Table
+-- 3. Regions Table (Province Master Data)
 CREATE TABLE "Region" (
-    "id" SERIAL PRIMARY KEY,
+    "id" INTEGER PRIMARY KEY,        -- Using Province_ID from CSV
     "name" VARCHAR(255) NOT NULL,
-    "type" VARCHAR(50) NOT NULL, -- 'PROVINCE' or 'REGENCY'
-    "parentId" INTEGER REFERENCES "Region"("id") ON DELETE SET NULL
+    "type" VARCHAR(50) DEFAULT 'PROVINCE'
 );
 
--- 4. Users Table (Updated with Role and Region)
+-- 4. Users Table
 CREATE TABLE "User" (
     "id" TEXT PRIMARY KEY,
     "name" VARCHAR(255),
     "email" VARCHAR(255) UNIQUE NOT NULL,
     "password" TEXT,
-    "role" "Role" DEFAULT 'PUBLIC' NOT NULL,
-    "regionId" INTEGER REFERENCES "Region"("id"),
+    "roleId" INTEGER REFERENCES "Role"("id") ON DELETE SET NULL,
     "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- 5. Prices Table
+-- 5. Prices Table (Historical Data - Direct CSV Mapping)
 CREATE TABLE "Price" (
-    "id" TEXT PRIMARY KEY,
+    "id" TEXT PRIMARY KEY,           -- Unique identifier for each record
     "commodityId" INTEGER NOT NULL REFERENCES "Commodity"("id") ON DELETE CASCADE,
     "regionId" INTEGER NOT NULL REFERENCES "Region"("id") ON DELETE CASCADE,
-    "price" DECIMAL(10, 2) NOT NULL,
-    "source" TEXT NOT NULL,
-    "date" TIMESTAMP NOT NULL,
+    "price" DECIMAL(20, 2) NOT NULL,
+    "priceType" INTEGER,             -- Maps to Price_Type in CSV
+    "dateParam" TIMESTAMP NOT NULL,  -- Maps to Date_Param in CSV
+    "dateScraped" TIMESTAMP,         -- Maps to Date_Scraped in CSV
     "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- 6. Inflations Table
+-- 6. Inflations Table (Analytical Data)
 CREATE TABLE "Inflation" (
     "id" TEXT PRIMARY KEY,
     "regionId" INTEGER NOT NULL REFERENCES "Region"("id") ON DELETE CASCADE,
     "month" INTEGER NOT NULL,
     "year" INTEGER NOT NULL,
     "rate" DOUBLE PRECISION NOT NULL,
-    "riskLevel" TEXT NOT NULL,
+    "riskLevel" TEXT NOT NULL,       -- SAFE, WATCH, HIGH_RISK
     "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     UNIQUE("regionId", "month", "year")
 );
@@ -72,7 +73,7 @@ CREATE TABLE "Prediction" (
     "commodityId" INTEGER NOT NULL REFERENCES "Commodity"("id") ON DELETE CASCADE,
     "regionId" INTEGER NOT NULL REFERENCES "Region"("id") ON DELETE CASCADE,
     "modelId" TEXT NOT NULL REFERENCES "MLModel"("id") ON DELETE CASCADE,
-    "predictedPrice" DECIMAL(10, 2) NOT NULL,
+    "predictedPrice" DECIMAL(20, 2) NOT NULL,
     "targetDate" TIMESTAMP NOT NULL,
     "confidenceScore" DOUBLE PRECISION,
     "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
@@ -89,6 +90,7 @@ CREATE TABLE "Report" (
     "createdAt" TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
 );
 
--- Indexes for performance
-CREATE INDEX "idx_price_date_commodity_region" ON "Price"("date", "commodityId", "regionId");
+-- Indexes for performance & quick lookups
+CREATE INDEX "idx_price_date_param" ON "Price"("dateParam");
+CREATE INDEX "idx_price_lookup" ON "Price"("commodityId", "regionId", "dateParam");
 CREATE INDEX "idx_prediction_target_date" ON "Prediction"("targetDate");
