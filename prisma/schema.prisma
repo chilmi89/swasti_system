@@ -24,3 +24,9 @@ model User {
   updatedAt DateTime @default(now()) @db.Timestamp(6)
   Role      Role?    @relation(fields: [roleId], references: [id], onUpdate: NoAction)
 }
+
+model Region {
+  id   Int     @id
+  name String  @db.VarChar(255)
+  type String? @default("PROVINCE") @db.VarChar(50)
+}
