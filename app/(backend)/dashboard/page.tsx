@@ -10,8 +10,8 @@ export default function Dashboard() {
         <div className="max-w-7xl mx-auto space-y-8">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6">
                 <div>
-                    <h1 className="text-2xl font-black text-slate-900 tracking-tighter italic">Dashboard <span className="text-primary not-italic">Overview</span></h1>
-                    <p className="text-slate-400 font-bold mt-1 text-xs">Monitoring system SWASTI secara real-time.</p>
+                    <h1 className="text-2xl font-bold text-slate-900">Dashboard <span className="text-[#3C50E0]">Overview</span></h1>
+                    <p className="text-slate-500 font-medium mt-1 text-xs">Monitoring system SWASTI secara real-time.</p>
                 </div>
                 <div className="px-5 py-2.5 bg-slate-900 text-white text-[9px] font-black rounded-2xl uppercase tracking-[0.2em] shadow-2xl shadow-slate-200 cursor-default">
                     Live Data Monitoring
