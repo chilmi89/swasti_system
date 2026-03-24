@@ -35,6 +35,7 @@ export const Button = ({
         <motion.button
             whileHover={{ scale: 1.02 }}
             whileTap={{ scale: 0.98 }}
+            suppressHydrationWarning
             className={cn(
                 'inline-flex items-center justify-center rounded-lg transition-all focus:outline-none focus:ring-1 focus:ring-slate-900 disabled:opacity-50 disabled:pointer-events-none',
                 variants[variant],

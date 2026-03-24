@@ -17,7 +17,8 @@ import {
     ChevronDown,
     Settings
 } from 'lucide-react';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import { toast } from 'react-toastify';
 import { cn } from '../lib/utils';
 
 // TailAdmin-inspired groupings for each role
@@ -97,6 +98,8 @@ interface SidebarProps {
 
 export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
     const pathname = usePathname();
+    const router = useRouter();
+    const [isLoggingOut, setIsLoggingOut] = useState(false);
     
     // Determine current role based on path
     const isPath = (role: string) => pathname?.startsWith(`/${role}`) || pathname?.includes(`/${role}/`);
@@ -111,6 +114,32 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
         currentSections = roleMenus.pemerintah;
         currentRoleLabel = "Pemerintah Access";
     }
+
+    const handleLogout = async () => {
+        try {
+            setIsLoggingOut(true);
+            const res = await fetch('/api/logout', { method: 'POST' });
+            
+            if (res.ok) {
+                // Clear any potential client-side storage
+                localStorage.clear();
+                sessionStorage.clear();
+                
+                toast.success("Berhasil keluar dari sistem");
+                
+                // Force a full page reload to the login page
+                // This completely destroys the Next.js router cache and any in-memory state
+                window.location.href = '/login';
+            } else {
+                toast.error("Gagal melakukan logout");
+            }
+        } catch (error) {
+            console.error("Logout error:", error);
+            toast.error("Terjadi kesalahan sistem saat logout");
+        } finally {
+            setIsLoggingOut(false);
+        }
+    };
 
     return (
         <aside 
@@ -130,6 +159,7 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                 <button
                     onClick={() => setSidebarOpen(false)}
                     aria-controls="sidebar"
+                    suppressHydrationWarning
                     className="block lg:hidden text-[#64748B]"
                 >
                     <svg
@@ -207,11 +237,17 @@ export const Sidebar = ({ sidebarOpen, setSidebarOpen }: SidebarProps) => {
                     </div>
                 </div>
 
-                <button className="flex w-full items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#64748B] duration-300 ease-in-out hover:bg-red-50 hover:text-red-500 group">
+                <button 
+                    onClick={handleLogout}
+                    disabled={isLoggingOut}
+                    suppressHydrationWarning
+                    className="flex w-full items-center gap-2.5 rounded-sm px-4 py-2 font-medium text-[#64748B] duration-300 ease-in-out hover:bg-red-50 hover:text-red-500 group disabled:opacity-50 disabled:cursor-not-allowed"
+                >
                     <LogOut size={18} className="group-hover:text-red-500" />
-                    Sign Out
+                    {isLoggingOut ? "Sedang Keluar..." : "Sign Out"}
                 </button>
             </div>
         </aside>
     );
 };
+

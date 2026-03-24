@@ -2,11 +2,67 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import { Mail, Lock, Eye, EyeOff, User, ArrowRight } from 'lucide-react';
+import { toast } from 'react-toastify';
 
 export default function RegisterPage() {
+    const router = useRouter();
     const [showPassword, setShowPassword] = useState(false);
     const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+    const [loading, setLoading] = useState(false);
+
+    const [formData, setFormData] = useState({
+        name: '',
+        email: '',
+        password: '',
+        confirmPassword: ''
+    });
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        if (formData.password !== formData.confirmPassword) {
+            toast.error("Kata sandi dan konfirmasi kata sandi tidak cocok!");
+            return;
+        }
+
+        setLoading(true);
+
+        try {
+            const res = await fetch('/api/register', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: formData.name,
+                    email: formData.email,
+                    password: formData.password
+                })
+            });
+
+            const data = await res.json();
+
+            if (!res.ok) {
+                toast.error(data.error || "Gagal melakukan registrasi");
+                return;
+            }
+
+            toast.success("Registrasi berhasil! Silakan masuk.");
+            router.push('/login');
+            
+        } catch (error) {
+            console.error("Registration error:", error);
+            toast.error("Terjadi kesalahan pada server");
+        } finally {
+            setLoading(false);
+        }
+    };
 
     return (
         <div className="bg-white rounded-[24px] shadow-[0_8px_40px_-12px_rgba(0,0,0,0.1)] p-8 sm:p-10 w-full border border-slate-50">
@@ -15,7 +71,7 @@ export default function RegisterPage() {
                 <p className="text-xs text-slate-400 font-medium">Bergabung dengan SWASTI Analytical Sanctum</p>
             </div>
 
-            <form className="space-y-4">
+            <form onSubmit={handleSubmit} className="space-y-4">
                 {/* Full Name Field */}
                 <div className="space-y-1.5">
                     <label className="text-[10px] font-bold text-slate-400 uppercase tracking-widest pl-1">
@@ -27,6 +83,10 @@ export default function RegisterPage() {
                         </div>
                         <input
                             type="text"
+                            name="name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            required
                             placeholder="Contoh: Budi Santoso"
                             className="w-full bg-[#f8fbff] border border-slate-100 rounded-xl py-3 pl-11 pr-4 text-sm font-medium text-slate-600 placeholder:text-slate-300 focus:outline-none focus:border-[#1a368d]/30 focus:ring-4 focus:ring-[#1a368d]/5 transition-all outline-none"
                         />
@@ -44,6 +104,10 @@ export default function RegisterPage() {
                         </div>
                         <input
                             type="email"
+                            name="email"
+                            value={formData.email}
+                            onChange={handleChange}
+                            required
                             placeholder="nama@email.com"
                             className="w-full bg-[#f8fbff] border border-slate-100 rounded-xl py-3 pl-11 pr-4 text-sm font-medium text-slate-600 placeholder:text-slate-300 focus:outline-none focus:border-[#1a368d]/30 focus:ring-4 focus:ring-[#1a368d]/5 transition-all outline-none"
                         />
@@ -61,6 +125,11 @@ export default function RegisterPage() {
                         </div>
                         <input
                             type={showPassword ? "text" : "password"}
+                            name="password"
+                            value={formData.password}
+                            onChange={handleChange}
+                            required
+                            minLength={6}
                             placeholder="••••••••"
                             className="w-full bg-[#f8fbff] border border-slate-100 rounded-xl py-3 pl-11 pr-11 text-sm font-medium text-slate-600 placeholder:text-slate-300 focus:outline-none focus:border-[#1a368d]/30 focus:ring-4 focus:ring-[#1a368d]/5 transition-all outline-none"
                         />
@@ -85,6 +154,11 @@ export default function RegisterPage() {
                         </div>
                         <input
                             type={showConfirmPassword ? "text" : "password"}
+                            name="confirmPassword"
+                            value={formData.confirmPassword}
+                            onChange={handleChange}
+                            required
+                            minLength={6}
                             placeholder="••••••••"
                             className="w-full bg-[#f8fbff] border border-slate-100 rounded-xl py-3 pl-11 pr-11 text-sm font-medium text-slate-600 placeholder:text-slate-300 focus:outline-none focus:border-[#1a368d]/30 focus:ring-4 focus:ring-[#1a368d]/5 transition-all outline-none"
                         />
@@ -102,10 +176,11 @@ export default function RegisterPage() {
                 <div className="pt-2">
                     <button
                         type="submit"
-                        className="w-full bg-[#1a368d] hover:bg-[#152a6d] text-white font-bold py-3.5 rounded-xl shadow-lg shadow-[#1a368d]/20 flex items-center justify-center gap-2 group transition-all"
+                        disabled={loading}
+                        className="w-full bg-[#1a368d] hover:bg-[#152a6d] disabled:bg-[#1a368d]/70 disabled:cursor-not-allowed text-white font-bold py-3.5 rounded-xl shadow-lg shadow-[#1a368d]/20 flex items-center justify-center gap-2 group transition-all"
                     >
-                        <span>Daftar Sekarang</span>
-                        <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />
+                        <span>{loading ? "Memproses..." : "Daftar Sekarang"}</span>
+                        {!loading && <ArrowRight size={18} className="transition-transform group-hover:translate-x-1" />}
                     </button>
                 </div>
             </form>

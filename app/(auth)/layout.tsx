@@ -26,8 +26,8 @@ export default function AuthLayout({
     children: React.ReactNode;
 }) {
     return (
-        <html lang="en">
-            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <html lang="en" suppressHydrationWarning>
+            <body className={`${geistSans.variable} ${geistMono.variable} antialiased`} suppressHydrationWarning>
                 <div className="min-h-screen bg-[#f8fafc] flex flex-col font-sans selection:bg-[#1a368d] selection:text-white">
                     {/* Header */}
                     <header className="px-8 py-6 flex justify-between items-center">
@@ -35,10 +35,10 @@ export default function AuthLayout({
                             <span className="text-2xl font-bold tracking-tight text-[#1a368d]">SWASTI</span>
                         </Link>
                         <div className="flex items-center gap-4 text-slate-400">
-                            <button className="hover:text-[#1a368d] transition-colors cursor-pointer p-1">
+                            <button className="hover:text-[#1a368d] transition-colors cursor-pointer p-1" suppressHydrationWarning>
                                 <Globe size={20} />
                             </button>
-                            <button className="hover:text-[#1a368d] transition-colors cursor-pointer p-1">
+                            <button className="hover:text-[#1a368d] transition-colors cursor-pointer p-1" suppressHydrationWarning>
                                 <HelpCircle size={20} />
                             </button>
                         </div>
